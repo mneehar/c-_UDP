@@ -1,58 +1,50 @@
 #ifndef __FUZE_UDPACCEPTOR_H
 #define __FUZE_UDPACCEPTOR_H
 
-#include <string>
+#include<iostream>
+#include <stdio.h>
+#include <stdlib.h>
 #include <netinet/in.h>
-#include <map>
-#include <iostream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <string>
-#include <sstream>
-
- 
+#include<sstream> 
 using namespace std;
 
-#define SIZE 1024
 #define BUFLEN 2048
-#define CLIENT_LENGTH 2048
-struct client_payload 
+
+struct client_payload
 {
-	int client_sequence;
-	char client_data[SIZE];
+	int sequence_number;
+	char client_data[BUFLEN];
 };
  
 class udpacceptor
 {
 	int    m_sd;
-	string m_address;
 	int    m_port;
-	unsigned int m_seq;
-	string m_filename;
-	map<int,string>m_seqmap;
-	string m_filepath;
-	FILE* m_fp;
-	string m_payload;
+	int  m_seq;
+	int m_eseq;
+	string m_swrong;
+	FILE* 	m_fp;	
 	string m_delim;
-	
  
 
 public:
-	udpacceptor(int port, const char* address,string filename);
+    	udpacceptor(int port);
     	~udpacceptor();
- 
-	int client_start();
- 
+	int start();
 private:
-    	udpacceptor() {}
-	string getfilename();
-	string getclientmessage();
-	void processserverpayload (string s);
-	string inttostring ( int s);
-	int getsequencenumber(string s);
-	int stringtoint( string s);
-
+	udpacceptor() {}
+	string processpayload (string s);
+	string inttostring(int s);
+	string getclientmessage(string cmessage);
+	int getsequencenumber( string message);
+	int stringtoint( string s );
+	//string inttostring(int a);
+	string getstringsequence( string s);
+	string getclientpayload( string s);
 };
 
 #endif
